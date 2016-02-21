@@ -1,5 +1,3 @@
-package palantir;
-
 class RubiksCube {
 	Block[][][] blocks;
 
