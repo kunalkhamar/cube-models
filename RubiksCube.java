@@ -18,39 +18,27 @@ class RubiksCube {
 	 *   'D' (down) , 'U' (up) ]
 	 */
 	public void rotatecw(char cmd) {
-		Block[][] face;
 		switch (cmd) {
 			case 'R':
-				face = extractFace(-1, 2, -1);
-				rotatecw(face);
-				flipAll(face, Face.YZ);
-				insertFace(face, -1, 2, -1);
+				rotatecw(-1,  2, -1, Face.YZ);
 			case 'L':
-				face = extractFace(-1, 0, -1);
-				rotatecw(face);
-				flipAll(face, Face.YZ);
-				insertFace(face, -1, 0, -1);
+				rotatecw(-1,  0, -1, Face.YZ);
 			case 'F':
-				face = extractFace(-1, -1, 0);
-				rotatecw(face);
-				flipAll(face, Face.XY);
-				insertFace(face, -1, -1, 0);
+				rotatecw(-1, -1,  0, Face.XY);
 			case 'B':
-				face = extractFace(-1, -1, 2);
-				rotatecw(face);
-				flipAll(face, Face.XY);
-				insertFace(face, -1, -1, 2);
+				rotatecw(-1, -1,  2, Face.XY);
 			case 'D':
-				face = extractFace(2, -1, -1);
-				rotatecw(face);
-				flipAll(face, Face.XZ);
-				insertFace(face, 2, -1, -1);
+				rotatecw( 2, -1, -1, Face.XZ);
 			case 'U':
-				face = extractFace(0, -1, -1);
-				rotatecw(face);
-				flipAll(face, Face.XZ);
-				insertFace(face, 0, -1, -1);
+				rotatecw( 0, -1, -1, Face.XZ);
 		}
+	}
+
+	private void rotatecw(int i, int j, int k, Face unchanged) {
+		Block[][] face = extractFace(i, j, k);
+		rotatecw(face);
+		flipAll(face, unchanged);
+		insertFace(face, i, j, k);
 	}
 
 	private Block[][] extractFace(int x, int y, int z) {
@@ -88,11 +76,9 @@ class RubiksCube {
 	}
 
 	private static void flipAll(Block[][] face, Face unchanged) {
-		for (int i = 0; i < face.length; i++) {
-			for (int j = 0; j < face[i].length; j++) {
+		for (int i = 0; i < face.length; i++)
+			for (int j = 0; j < face[i].length; j++)
 				face[i][j].flip(unchanged);
-			}
-		}
 	}
 
 	private static void rotatecw(Block[][] m) {
@@ -125,9 +111,7 @@ class RubiksCube {
 	static class Block {
 		Color i, j, k; // color of face perpendicular to vector
 		
-		enum Type {
-			INNER, CENTER, EDGE, CORNER
-		}
+		enum Type { INNER, CENTER, EDGE, CORNER }
 		Type type;
 
 		public Block(Type t, Color i, Color j, Color k) {
@@ -138,25 +122,18 @@ class RubiksCube {
 		}
 
 		public void flip(Face unchanged) {
-			if (type == Type.CENTER)
-				return;
+			if (type == Type.CENTER) return;
 			
 			Color temp;
 			switch (unchanged) {
 				case XY:
-					temp = i;
-					i = j;
-					j = temp;
+					temp = i; i = j; j = temp;
 					break;
 				case YZ:
-					temp = j;
-					j = k;
-					k = temp;
+					temp = j; j = k; k = temp;
 					break;
 				case XZ:
-					temp = i;
-					i = k;
-					k = temp;
+					temp = i; i = k; k = temp;
 					break;
 			}
 		}
